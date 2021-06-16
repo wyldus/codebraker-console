@@ -14,16 +14,15 @@ public class GameRepository {
   }
 
   public Game newGame(String pool, int length) throws IOException {
-    Game game = new Game();
-    game.setPool(pool);
-    game.setLength(length);
-    Response<Game> response = proxy.startGame(game).execute();
-    if (response.isSuccessful()){
-     return response.body();
-    } else {
+    Game gameStub = new Game();
+    gameStub.setPool(pool);
+    gameStub.setLength(length);
+    Response<Game> response = proxy.startGame(gameStub).execute();
+    if (!response.isSuccessful()) {
       throw new IllegalArgumentException();
     }
-
+    return response.body();
   }
 
 }
+
