@@ -36,7 +36,6 @@ public interface CodebreakerServiceProxy {
   Call<Game> getGame(@Path("id") String id);
 
   @POST("codes/{id}/guesses")
-
   Call<Guess> submitGuess(@Path("id") String id, @Body Guess guess);
 
   static CodebreakerServiceProxy getInstance() {
@@ -64,7 +63,7 @@ public interface CodebreakerServiceProxy {
           .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
           .create();
       HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-      interceptor.setLevel(Level.BODY);
+      interceptor.setLevel(Level.NONE);
       OkHttpClient client = new OkHttpClient.Builder()
           .addInterceptor(interceptor)
           .build();
