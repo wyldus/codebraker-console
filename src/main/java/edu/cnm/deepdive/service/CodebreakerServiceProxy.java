@@ -41,24 +41,19 @@ public interface CodebreakerServiceProxy {
   static CodebreakerServiceProxy getInstance() {
     return InstanceHolder.INSTANCE;
   }
+  static Gson getGsonInstance() {
+    return InstanceHolder.GSON;
+  }
 
-  /**
-   * Implements the "lazy" <a
-   * href="https://en.wikipedia.org/wiki/Initialization-on-demand_holder_idiom">initialization-on-demand
-   * holder idiom</a>. This creates an instance of {@link CodebreakerServiceProxy} only when the
-   * {@code InstanceHolder} class is initialized; since this initialization happens only once, and
-   * since only 1 thread is allowed to load a class into memory, this guarantees that only one
-   * instance of {@link CodebreakerServiceProxy} will be created&mdash;that is, {@code
-   * CodebreakerServiceProxy} is a "singleton".
-   */
   class InstanceHolder {
 
+    private  static final Gson GSON;
     private static final CodebreakerServiceProxy INSTANCE;
 
     static {
       // Creation of instances of Gson, OkHttpClient, Retrofit all employ the "builder pattern", as
       // supported by those libraries.
-      Gson gson = new GsonBuilder()
+       GSON = new GsonBuilder()
           .excludeFieldsWithoutExposeAnnotation()
           .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
           .create();
@@ -69,7 +64,7 @@ public interface CodebreakerServiceProxy {
           .build();
       Retrofit retrofit = new Retrofit.Builder()
           .baseUrl("https://ddc-java.services/codebreaker/")
-          .addConverterFactory(GsonConverterFactory.create(gson))
+          .addConverterFactory(GsonConverterFactory.create(GSON))
           .client(client)
           .build();
       INSTANCE = retrofit.create(CodebreakerServiceProxy.class);
